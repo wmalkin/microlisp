@@ -4,7 +4,6 @@
 
 const repl = require("./repl.js"),
       ea = require("./ea.js"),
-      func = require("./func.js"),
       test = require("./test.js");
 
 
@@ -16,9 +15,9 @@ require("./lib/math.js");
 require("./lib/struct.js");
 require("./lib/strings.js");
 require("./lib/control.js");
+require("./lib/defun.js");
 
 
-func.init();
 test.init();
 
 repl.start(ea.eval_str)
