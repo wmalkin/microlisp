@@ -16,6 +16,7 @@ function Scope(outer) {
     this.vars = {};
 
 
+    // set a value in this scope
     this.$let = (sym, value) => {
         var rsym = paths.__resolveInContainer(sym, this.vars);
         paths.__putIntoContainer(rsym, value);
@@ -49,32 +50,14 @@ function Scope(outer) {
 
 
     // Bind arguments to names in this scope.
-    // Example:
-    //
-    //   (def f1 (fun (p0 p1 p2 p3) ...))
-    //
-    //   (f1 v0 &p0 v1 &p2 v2 v3 v4 v5)
-    //
-    //   p0 => v1
-    //   p1 => v0
-    //   p2 => v2
-    //   p3 => v3
-    //   __args => [v4,v5]
-    //
-    // Also supports binding a list of arguments, where the list can
-    // contain named arguments or ordered arguments.
-    //
-    //   (let ops (list 1 2 3))
-    //   (f1 *ops)
-    //
-    this.$bind = (names, values, sform) => {
+    this.$bind = async (names, values, sform) => {
         var me = this;
 
 
-        var valueof = function valueof(val, sform) {
+        var valueof = async function valueof(val, sform) {
             if (sform)
                 return val;
-            return ea.eval_sexpr(val, me.outer);
+            return await ea.eval_sexpr(val, me.outer);
         }
 
 
@@ -133,7 +116,7 @@ function Scope(outer) {
             var v = values[i];
             if (util.issymbol(v) && v.symbol.length && v.symbol[0] == '*') {
                 // Evaluate symbol and unpack in place
-                v = valueof(v, sform);
+                v = await valueof(v, sform);
                 if (util.isdict(v)) {
                     var nvs = [];
                     for (var nv of Object.entries(v)) {
@@ -161,7 +144,7 @@ function Scope(outer) {
                 // bind next value to a param, or insert in kwargs
                 var pidx = findname(name),
                     n = keyforname(name),
-                    v = valueof(values[i+1], sform);
+                    v = await valueof(values[i+1], sform);
                 if (pidx >= 0) {
                     bindnv(n, v);
                     unboundNames[pidx] = null;
@@ -181,7 +164,7 @@ function Scope(outer) {
         while (ni < unboundNames.length) {
             if (unboundNames[ni] != null) {
                 if ((vi < unboundValues.length) && (!isLabel(unboundNames[ni]))){
-                    bindnv(keyforname(unboundNames[ni]), valueof(unboundValues[vi], sform));
+                    bindnv(keyforname(unboundNames[ni]), await valueof(unboundValues[vi], sform));
                     vi++;
                 } else {
                     bindnv(keyforname(unboundNames[ni]), null);
@@ -194,7 +177,7 @@ function Scope(outer) {
         if (vi < unboundValues.length) {
             var args = unboundValues.slice(vi);
             for (var i = 0; i < args.length; i++)
-                args[i] = valueof(args[i], sform);
+                args[i] = await valueof(args[i], sform);
             if (args.length)
                 bindnv('__args', args);
         }

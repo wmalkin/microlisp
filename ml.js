@@ -16,6 +16,7 @@ require("./lib/struct.js");
 require("./lib/strings.js");
 require("./lib/control.js");
 require("./lib/defun.js");
+require("./lib/async.js");
 
 
 test.init();

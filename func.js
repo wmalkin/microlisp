@@ -31,27 +31,27 @@ function FUNC(opts) {
 
     // context is the scope of the calling function body, so macro
     // output can be evaluated in that scope
-    this.call = function(args, context) {
+    this.call = async function(args, context) {
         var rs = null;
         switch (this.type) {
             case BODY_SEXPR:
                 if (this.bindings) {
                     // create a local scope and bind in args; then eval body in that scope
                     var s = scopes.create(this.scope);
-                    s.$bind(this.bindings, args, false);
-                    rs = ea.eval_sexpr(this.body, s);
+                    await s.$bind(this.bindings, args, false);
+                    rs = await ea.eval_sexpr(this.body, s);
                 } else {
                     // eval body in the scope (closure) for this function
-                    rs = ea.eval_sexpr(this.body, this.scope);
+                    rs = await ea.eval_sexpr(this.body, this.scope);
                 }
                 break;
             case BODY_JAVASCRIPT:
                 // call a javascript body
-                rs = this.body(args, context);
+                rs = await this.body(args, context);
                 break;
         }
         if (this.macro)
-            rs = ea.eval_sexpr(rs, context);
+            rs = await ea.eval_sexpr(rs, context);
         return rs;
     }
 
@@ -68,6 +68,8 @@ function FUNC(opts) {
         this.type = BODY_JAVASCRIPT;
     else
         this.type = BODY_UNKNOWN;
+
+    console.log(this.name, typeof this.body);
 
     this.sform = !!opts.sform || !!opts.macro;
     this.macro = !!opts.macro;

@@ -52,7 +52,7 @@ function repl_start(process_line) {
     repl.prompt();
 
     repl.on('line', async function(line) {
-        let result = process_line(line)
+        let result = await process_line(line)
         if (result != null && result != undefined)
         	console.log(util.tolisp(result));
         repl.prompt();

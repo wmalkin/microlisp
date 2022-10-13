@@ -82,7 +82,8 @@ function isfunc(expr) {
 
 
 function isjsfunc(expr) {
-    return typeof expr === 'function'; 
+    var tof = typeof expr;
+    return (tof === 'function' || tof === 'AsyncFunction'); 
 }
 
 

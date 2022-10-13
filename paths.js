@@ -9,11 +9,11 @@ module.exports = {};
 const util = require("./util.js");
 
 
-function __resolveOne (sym, container) {
+function __resolveOne (key, container) {
     if (util.isdict(container))
-        return container[sym];
+        return container[key];
     if (util.islist(container)) {
-        var i = util.tonum(sym);
+        var i = util.tonum(key);
         if (util.isnumber(i))
             return container[i];
     }
@@ -22,20 +22,18 @@ function __resolveOne (sym, container) {
 
 
 function __resolveInContainer (expr, container) {
-    // First, prefer returning a single element that matches the whole expr key
-    if (util.isdict(container) && container.hasOwnProperty(expr)) {
-        return {
-            container: container,
-            sym: expr,
-            value: container[expr]
-        }
-    }
+    var str_path = util.tostring(expr);
 
-        var str_path = util.tostring(expr)
-        var path = []
-        if (!util.isnull(str_path)) {
-                path = str_path.split('.');
-        }
+    // First, prefer returning a single element whose key
+    // matches the whole expr key
+    // ex: { "foo.bar":123 }
+    if (util.isdict(container) && container.hasOwnProperty(str_path))
+        return { container: container, sym: expr, value: container[str_path] }
+
+    var path = [];
+    if (!util.isnull(str_path))
+        path = str_path.split('.');
+
     // follow the dot path
     while (!util.isnull(container) && path.length > 1) {
         var inner = __resolveOne(path[0], container);
