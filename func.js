@@ -69,8 +69,6 @@ function FUNC(opts) {
     else
         this.type = BODY_UNKNOWN;
 
-    console.log(this.name, typeof this.body);
-
     this.sform = !!opts.sform || !!opts.macro;
     this.macro = !!opts.macro;
 }
