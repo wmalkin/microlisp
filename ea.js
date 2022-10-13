@@ -30,12 +30,12 @@ function apply(f, args, scope) {
 // eval a tree sexpr
 function eval_sexpr(sexpr, scope) {
   scope = scope || scopes.global;
-  if (util.islist(sexpr) && sexpr.length > 0 && util.issymbol(sexpr[0]))
-    return apply(sexpr[0], sexpr.slice(1), scope);
-  else if (util.islist(sexpr)) {
-    // weird implicit block
-    var rs = [];
-    for (var i = 0; i < sexpr.length; i++)
+  if (util.islist(sexpr) && sexpr.length > 0) {
+    var first = eval_sexpr(sexpr[0], scope);
+    if (util.isfunc(first))
+      return apply(first, sexpr.slice(1), scope);
+    var rs = [first];
+    for (var i = 1; i < sexpr.length; i++)
       rs.push(eval_sexpr(sexpr[i], scope));
     return rs;
   } else if (util.issymbol(sexpr)) {
