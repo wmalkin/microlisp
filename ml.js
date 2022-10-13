@@ -7,8 +7,9 @@ const repl = require("./repl.js"),
       func = require("./func.js"),
       test = require("./test.js");
 
+
 // require all of the builtin function groups
-require("./builtins.js");
+require("./lib/lang.js");
 require("./lib/types.js");
 require("./lib/eq.js");
 require("./lib/math.js");
