@@ -17,6 +17,7 @@ require("./lib/strings.js");
 require("./lib/control.js");
 require("./lib/defun.js");
 require("./lib/async.js");
+require("./lib/mongo.js");
 
 
 test.init();
