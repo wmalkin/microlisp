@@ -50,6 +50,10 @@ function isbool(expr) {
     return expr === true || expr === false;
 }
 
+function isdate(expr) {
+    return expr === true || expr === false;
+}
+
 
 function istrue(expr) {
     return expr === true;

@@ -4,7 +4,8 @@
 
 const repl = require("./repl.js"),
       ea = require("./ea.js"),
-      test = require("./test.js");
+      test = require("./test.js"),
+      loader = require("./loader.js");
 
 
 // require all of the builtin function groups
@@ -18,6 +19,9 @@ require("./lib/control.js");
 require("./lib/defun.js");
 require("./lib/async.js");
 require("./lib/mongo.js");
+
+// require Lisp libs
+loader.load("./lisp/lang.lisp")
 
 
 test.init();

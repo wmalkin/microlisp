@@ -33,16 +33,17 @@ function FUNC(opts) {
     // output can be evaluated in that scope
     this.call = async function(args, context) {
         var rs = null;
+        // console.log("call", this.name, " in scope:", context.name);
         switch (this.type) {
             case BODY_SEXPR:
                 if (this.bindings) {
                     // create a local scope and bind in args; then eval body in that scope
-                    var s = scopes.create(this.scope);
+                    var s = scopes.create(this.scope || scopes.global, this.name + " activation");
                     await s.$bind(this.bindings, args, false);
                     rs = await ea.eval_sexpr(this.body, s);
                 } else {
                     // eval body in the scope (closure) for this function
-                    rs = await ea.eval_sexpr(this.body, this.scope);
+                    rs = await ea.eval_sexpr(this.body, this.scope || scopes.global);
                 }
                 break;
             case BODY_JAVASCRIPT:
@@ -60,7 +61,7 @@ function FUNC(opts) {
     this.docs = opts.docs;
     this.bindings = opts.bindings;
     this.body = opts.body;
-    this.scope = opts.scope || scopes.global;
+    this.scope = opts.scope;
 
     if (util.islist(this.body))
         this.type = BODY_SEXPR;

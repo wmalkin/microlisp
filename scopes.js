@@ -11,8 +11,9 @@ const util = require("./util.js"),
             paths = require("./paths.js");
 
 
-function Scope(outer) {
+function Scope(outer, name) {
     this.outer = outer;
+    this.name = name;
     this.vars = {};
 
 
@@ -189,12 +190,12 @@ function Scope(outer) {
 }
 
 
-function create(outer) {
-    return new Scope(outer);
+function create(outer, name) {
+    return new Scope(outer, name);
 }
 
 
-module.exports.global = new Scope(null);
+module.exports.global = new Scope(null, "global");
 module.exports.create = create;
 
 
