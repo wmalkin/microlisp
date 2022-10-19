@@ -2,29 +2,26 @@
 // Micro-sized Lisp implementation for tailored configuration languages.
 //
 
-const repl = require("./repl.js"),
-      ea = require("./ea.js"),
-      test = require("./test.js"),
-      loader = require("./loader.js");
+const util = require("./lib/core/util.js"),
+      repl = require("./lib/core/repl.js"),
+      ea = require("./lib/core/ea.js"),
+      test = require("./lib/core/test.js"),
+      load = require("./lib/core/loader.js");
 
 
-// require all of the builtin function groups
-require("./lib/lang.js");
-require("./lib/types.js");
-require("./lib/eq.js");
-require("./lib/math.js");
-require("./lib/struct.js");
-require("./lib/strings.js");
-require("./lib/control.js");
-require("./lib/defun.js");
-require("./lib/async.js");
-require("./lib/mongo.js");
+require("./lib/funcs/lang.js");
+require("./lib/funcs/types.js");
+require("./lib/funcs/eq.js");
+require("./lib/funcs/math.js");
+require("./lib/funcs/struct.js");
+require("./lib/funcs/strings.js");
+require("./lib/funcs/control.js");
+require("./lib/funcs/defun.js");
+require("./lib/funcs/async.js");
+require("./lib/funcs/mongo.js");
 
-// require Lisp libs
-loader.load("./lisp/lang.lisp")
+load("./lib/lisp/lang.lisp");
 
-
-test.init();
-
+// test.init();
 repl.start(ea.eval_str)
 
