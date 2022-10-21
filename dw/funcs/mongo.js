@@ -35,7 +35,7 @@ async function OpenDatabase(config) {
 
 async function mongo_prep(args, bindings, scope) {
     return new Promise(async (resolve, reject) => {
-        var params = env.destructure(bindings, args, scope);
+        var params = await env.destructure(bindings, args, scope);
 
         if (params.db) {
             if (params.coll == 'events' && params.query.ts == null)

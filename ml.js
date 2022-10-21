@@ -5,10 +5,10 @@
 const repl = require("./lib/core/repl.js"),
       lisp = require("./lib/lisp.js");
 
-require("./db/funcs/mongo.js")(lisp);
+require("./dw/funcs/mongo.js")(lisp);
 
 lisp.load("./lib/lisp/");
-lisp.load("./db/lisp");
+lisp.load("./dw/lisp");
 
 repl.start(lisp.seval);
 
