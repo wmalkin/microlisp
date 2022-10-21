@@ -9,8 +9,7 @@ module.exports = {};
 const MongoClient = require('mongodb').MongoClient,
       ObjectId = require('mongodb').ObjectId;
 
-const func = require("../core/func.js"),
-      scopes = require("../core/scopes.js");
+var env;
 
 
 async function OpenDatabase(config) {
@@ -36,12 +35,7 @@ async function OpenDatabase(config) {
 
 async function mongo_prep(args, bindings, scope) {
     return new Promise(async (resolve, reject) => {
-        var params = scopes.$destructure([args, bindings], scope);
-        // var s = scopes.create(scope);
-        // await s.bind(bindings, args);
-        // var params = {};
-        // for (var i = 0; i < bindings.length; i++)
-        //     params[bindings[i]] = s.get(bindings[i]);
+        var params = env.destructure(bindings, args, scope);
 
         if (params.db) {
             if (params.coll == 'events' && params.query.ts == null)
@@ -136,15 +130,20 @@ async function $mongo_listdbs(args, scope) {
 }
 
 
+function def(lisp) {
+    env = lisp;
+    lisp.def({ name: "mongo.count", body: $mongo_count });
+    lisp.def({ name: "mongo.find", body: $mongo_find });
+    lisp.def({ name: "mongo.findone", body: $mongo_findone });
+    lisp.def({ name: "mongo.insertone", body: $mongo_insertone });
+    lisp.def({ name: "mongo.insertmany", body: $mongo_insertmany });
+    lisp.def({ name: "mongo.updateone", body: $mongo_updateone });
+    lisp.def({ name: "mongo.updatemany", body: $mongo_updatemany });
+    lisp.def({ name: "mongo.deleteone", body: $mongo_deleteone });
+    lisp.def({ name: "mongo.deletemany", body: $mongo_deletemany });
+    lisp.def({ name: "mongo.listdbs", body: $mongo_listdbs });
+}
 
-func.def({ name: "mongo.count", body: $mongo_count });
-func.def({ name: "mongo.find", body: $mongo_find });
-func.def({ name: "mongo.findone", body: $mongo_findone });
-func.def({ name: "mongo.insertone", body: $mongo_insertone });
-func.def({ name: "mongo.insertmany", body: $mongo_insertmany });
-func.def({ name: "mongo.updateone", body: $mongo_updateone });
-func.def({ name: "mongo.updatemany", body: $mongo_updatemany });
-func.def({ name: "mongo.deleteone", body: $mongo_deleteone });
-func.def({ name: "mongo.deletemany", body: $mongo_deletemany });
-func.def({ name: "mongo.listdbs", body: $mongo_listdbs });
+
+module.exports = def;
 
