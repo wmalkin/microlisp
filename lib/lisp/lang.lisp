@@ -4,6 +4,10 @@
 
 (progn
   
+  (defsform block ()
+    (apply progn ,__args ,__kwargs))
+  
+  
   (defun default (val def)
     (if (nullp val) def val))
   
