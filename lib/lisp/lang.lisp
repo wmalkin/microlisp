@@ -5,7 +5,7 @@
 (progn
   
   (defsform block ()
-    (apply progn ,__args ,__kwargs))
+    (apply progn ,@__args ,@__kwargs))
   
   
   (defun default (val def)
