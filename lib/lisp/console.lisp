@@ -9,11 +9,10 @@
     (if (dictp data) data (dict 'name' data)))
   
   
-  (defun table.prt (data &cols &title &sort)
+  (defun table.prt (data &cols &title)
     (let tdata (dict))
     (put tdata 'rows' data)
     (if cols (put tdata 'columns' cols))
-    (if sort (put tdata 'sort' sort))
     (if title (put tdata 'title' title))
     (table.print tdata))
   
