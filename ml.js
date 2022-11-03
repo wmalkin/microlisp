@@ -10,5 +10,5 @@ require("./dw/funcs/mongo.js")(lisp);
 lisp.load("./lib/lisp/");
 lisp.load("./dw/lisp");
 
-repl.start(lisp.seval);
+repl.start(lisp.streval);
 

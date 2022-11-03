@@ -3,13 +3,26 @@
 //
 
 
-module.exports = {};
+var env;
+
+module.exports = function def(lisp) {
+    env = lisp;
+    lisp.def({ name: "mongo.count", body: $mongo_count });
+    lisp.def({ name: "mongo.find", body: $mongo_find });
+    lisp.def({ name: "mongo.findone", body: $mongo_findone });
+    lisp.def({ name: "mongo.insertone", body: $mongo_insertone });
+    lisp.def({ name: "mongo.insertmany", body: $mongo_insertmany });
+    lisp.def({ name: "mongo.updateone", body: $mongo_updateone });
+    lisp.def({ name: "mongo.updatemany", body: $mongo_updatemany });
+    lisp.def({ name: "mongo.deleteone", body: $mongo_deleteone });
+    lisp.def({ name: "mongo.deletemany", body: $mongo_deletemany });
+    lisp.def({ name: "mongo.listdbs", body: $mongo_listdbs });
+}
+
 
 
 const MongoClient = require('mongodb').MongoClient,
       ObjectId = require('mongodb').ObjectId;
-
-var env;
 
 
 async function OpenDatabase(config) {
@@ -129,21 +142,4 @@ async function $mongo_listdbs(args, scope) {
     });
 }
 
-
-function def(lisp) {
-    env = lisp;
-    lisp.def({ name: "mongo.count", body: $mongo_count });
-    lisp.def({ name: "mongo.find", body: $mongo_find });
-    lisp.def({ name: "mongo.findone", body: $mongo_findone });
-    lisp.def({ name: "mongo.insertone", body: $mongo_insertone });
-    lisp.def({ name: "mongo.insertmany", body: $mongo_insertmany });
-    lisp.def({ name: "mongo.updateone", body: $mongo_updateone });
-    lisp.def({ name: "mongo.updatemany", body: $mongo_updatemany });
-    lisp.def({ name: "mongo.deleteone", body: $mongo_deleteone });
-    lisp.def({ name: "mongo.deletemany", body: $mongo_deletemany });
-    lisp.def({ name: "mongo.listdbs", body: $mongo_listdbs });
-}
-
-
-module.exports = def;
 

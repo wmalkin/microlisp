@@ -18,6 +18,9 @@
     (while (< (count rs) digits)
            (let rs (cat '0' rs)))
     rs)
+  
+  
+  (defun nowms () (date-in-ms (now)))
 
 )
 
