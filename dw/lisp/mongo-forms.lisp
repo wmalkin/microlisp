@@ -94,7 +94,7 @@
     (is-or-in (list 1 2 3)) => { $in: [1,2,3] }
     (is-or-in (list (list 1 2) (list 3 4) 5)) => { $in: [1,2,3,4,5] }
     """
-    (let rs (explode ids))
+    (setq rs (explode ids))
     (if (== 1 (count rs)) rs.0 (mongo.in rs)))
   
 
@@ -105,7 +105,7 @@
 
     (mongo.exists 'device.loc') => {'device.loc':{$exists:true}}
     """
-    (let rs (dict))
+    (setq rs (dict))
     (each __args (fun (field) (putkey rs field (dict '$exists' true))))
     rs)
   
@@ -123,5 +123,68 @@
                           "localField" localField
                           "foreignField" foreignField
                           "as" as)))
+  
+  
+  (setq mdb._dbg false)
+  
+  
+  (defun mdb.dbg (on) (setq mdb._dbg on))
+  
+  
+  (defun mdb.options (kvs) (mdict (dict "limit" 1000) kvs))
+  
+  
+  (defun mdb.count (collection)
+    (setq q (mongo.$Q __args))
+    (if mdb._dbg (prt "mdb.count" q))
+    (mongo.count _env collection q (mdb.options __kwargs)))
+  
+  
+  (defun mdb.find (collection)
+    (setq q (mongo.$Q __args))
+    (if mdb._dbg (prt "mdb.find" q))
+    (mongo.find _env collection q (mdb.options __kwargs)))
+  
+  
+  (defun mdb.findone (collection)
+    (setq q (mongo.$Q __args))
+    (if mdb._dbg (prt "mdb.findone" q))
+    (mongo.findone _env collection q (mdb.options __kwargs)))
+
+  
+  (defun mdb.insertone (collection record)
+    (if mdb._dbg (prt "mdb.insertone" record))
+    (mongo.insertone _env collection record (mdb.options __kwargs)))
+  
+  
+  (defun mdb.insertmany (collection record)
+    (if mdb._dbg (prt "mdb.insertmany" record))
+    (mongo.insertmany _env collection record (mdb.options __kwargs)))
+  
+  
+  (defun mdb.updateone (collection &update update)
+    (setq q (mongo.$Q __args))
+    (if mdb._dbg (prt "mdb.updateone" q update))
+    (mongo.updateone _env collection q record (mdb.options __kwargs)))
+  
+  
+  (defun mdb.updatemany (collection &update update)
+    (setq q (mongo.$Q __args))
+    (if mdb._dbg (prt "mdb.updatemany" q update))
+    (mongo.updatemany _env collection q record (mdb.options __kwargs)))
+  
+  
+  (defun mdb.deleteone (collection)
+    (setq q (mongo.$Q __args))
+    (if mdb._dbg (prt "mdb.deleteone" q))
+    (mongo.deleteone _env collection q (mdb.options __kwargs)))
+
+  
+  (defun mdb.deletemmany (collection)
+    (setq q (mongo.$Q __args))
+    (if mdb._dbg (prt "mdb.deletemmany" q))
+    (mongo.deletemmany _env collection q (mdb.options __kwargs)))
+
+  
 )
 

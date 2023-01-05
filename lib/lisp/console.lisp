@@ -10,7 +10,7 @@
   
   
   (defun table.prt (data &cols &title &sort)
-    (let tdata (dict))
+    (setq tdata (dict))
     (put tdata 'rows' data)
     (if cols (put tdata 'columns' cols))
     (if title (put tdata 'title' title))

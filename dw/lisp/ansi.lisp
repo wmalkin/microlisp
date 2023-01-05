@@ -5,7 +5,9 @@
 
 (progn
   
-  (let ansi.*docs*
+  (defvar ansi (dict))
+  
+  (setq ansi.*docs*
     """
     ANSI escape codes for terminal output and manipulation
     """)
@@ -61,42 +63,42 @@
     (cat (ansi.fg color) txt (ansi.cr)))
   
   
-  (defun ansi.green (txt)
+  (defun green (txt)
     """
     Wraps `txt` with escape codes for green text.
     """
     (ansi.ctxt txt 46))
   
   
-  (defun ansi.yellow (txt)
+  (defun yellow (txt)
     """
     Wraps `txt` with escape codes for yellow text.
     """
     (ansi.ctxt txt 226))
   
   
-  (defun ansi.red (txt)
+  (defun red (txt)
     """
     Wraps `txt` with escape codes for red text.
     """
     (ansi.ctxt txt 196))
   
   
-  (defun ansi.purple (txt)
+  (defun purple (txt)
     """
     Wraps `txt` with escape codes for purple text.
     """
     (ansi.ctxt txt 54))
   
   
-  (defun ansi.blue (txt)
+  (defun blue (txt)
     """
     Wraps `txt` with escape codes for blue text.
     """
     (ansi.ctxt txt 4))
   
   
-  (defun ansi.orange (txt)
+  (defun orange (txt)
     """
     Wraps `txt` with escape codes for orange text.
     """
@@ -159,10 +161,10 @@
     produce colored text.
     """
     (for (i 0 16)
-         (let line "")
+         (setq line "")
          (for (j 0 16)
-              (let ci (+ (* i 16) j))
-              (let line
+              (setq ci (+ (* i 16) j))
+              (setq line
                 (cat
                   line
                   (ansi.fg ci)

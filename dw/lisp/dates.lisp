@@ -1,12 +1,12 @@
 (progn
 
-  (let dates.*docs*
+  (setq dates.*docs*
     """
     Functions to manipulate and format dates.
     """)
 
 
-  (let dates.multipliers
+  (setq dates.multipliers
     (dict
       'd' 86400000
       'h' 3600000
@@ -14,7 +14,7 @@
       's' 1000
       'ms' 1))
 
-  (let 1h '1h' 2h '2h' 3h '3h' 4h '4h' 5h '5h' 6h '6h' 8h '8h' 12h '12h'
+  (setq 1h '1h' 2h '2h' 3h '3h' 4h '4h' 5h '5h' 6h '6h' 8h '8h' 12h '12h'
     1d '1d' 2d '2d' 3d '3d' 4d '4d' 5d '5d' 7d '7d' 10d '10d' 14d '14d' 21d '21d' 28d '28d' 30d '30d' 60d '60d' 90d '90d'
     1w '7d' 2w '14d' 3w '21d' 4w '28d')
 
@@ -41,7 +41,7 @@
     (if (nullp time-range)
         (* dates.multipliers.d 1)
         (if (strp time-range)
-            (with (time-value (substr time-range 0 (- (count time-range) 1))
+            (let (time-value (substr time-range 0 (- (count time-range) 1))
                    time-unit (substr time-range -1))
                   (if (not (nullp (get dates.multipliers time-unit)))
                       (* (get dates.multipliers time-unit) (tonum time-value))
@@ -57,7 +57,7 @@
     is an integer quantity of time, and the string portion is a time unit. See
     `time-range-in-ms` for allowed values.
     """
-      (if (datep base-date) (let base-date (tonum base-date)))
+      (if (datep base-date) (setq base-date (tonum base-date)))
       (todate (+ base-date (dates.time-range-in-ms time-range))))
 
 
@@ -71,8 +71,8 @@
     value otherwise.
     """
     (progn
-      (if (datep first-date) (let first-date (tonum first-date)))
-      (if (datep second-date) (let second-date (tonum second-date)))
+      (if (datep first-date) (setq first-date (tonum first-date)))
+      (if (datep second-date) (setq second-date (tonum second-date)))
       (- first-date second-date)))
 
 
@@ -124,7 +124,7 @@
     """
     (if (and (not (nullp dt)) (!= dt 0))
         (progn
-          (if (nump dt) (let dt (todate dt)))
+          (if (nump dt) (setq dt (todate dt)))
           (dates.fmt-internet-date (gmt-date dt)))))
 
 
@@ -135,7 +135,7 @@
     """
     (if (and (not (nullp dt)) (!= dt 0))
         (progn
-          (if (nump dt) (let dt (todate dt)))
+          (if (nump dt) (setq dt (todate dt)))
           (dates.fmt-short-date (local-date dt)))))
 
 
@@ -146,7 +146,7 @@
     """
     (if (and (not (nullp dt)) (!= dt 0))
         (progn
-          (if (nump dt) (let dt (todate dt)))
+          (if (nump dt) (setq dt (todate dt)))
           (dates.fmt-short-date (gmtdate dt)))))
 
 
@@ -165,7 +165,7 @@
     """
     (if (and (not (nullp dt)) (!= dt 0))
         (progn
-          (if (nump dt) (let dt (todate dt)))
+          (if (nump dt) (setq dt (todate dt)))
           (dates.fmt-short-date-ms (local-date dt)))))
 
 
@@ -176,7 +176,7 @@
     """
     (if (and (not (nullp dt)) (!= dt 0))
         (progn
-          (if (nump dt) (let dt (todate dt)))
+          (if (nump dt) (setq dt (todate dt)))
           (dates.fmt-short-date-ms (gmt-date dt)))))
 
 
@@ -196,7 +196,7 @@
     Input can be a date or a millisecond timestamp.
     """
     (progn
-      (if (nump dt) (let dt (todate dt)))
+      (if (nump dt) (setq dt (todate dt)))
       (dates.fmt-hhmmss (local-date dt))))
 
 
@@ -206,7 +206,7 @@
     Input can be a date or a millisecond timestamp.
     """
     (progn
-      (if (nump dt) (let dt (todate dt)))
+      (if (nump dt) (setq dt (todate dt)))
       (dates.fmt-hhmmss (gmt-date dt))))
 
 

@@ -66,7 +66,7 @@
     """
     Locate docstrings that contain the given text.
     """
-    (let tf (fun (fv fk)
+    (setq tf (fun (fv fk)
               (and
                 (funcp fv)
                 (or
