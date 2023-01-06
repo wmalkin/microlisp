@@ -18,10 +18,12 @@
         (setq div /)
         (setq eq ==)
         (setq ne !=)
-        (setq gt <)
-        (setq lt >)
-        (setq ge <=)
-        (setq le >=)
+        (setq gt >)
+        (setq lt <)
+        (setq ge >=)
+        (setq le <=)
+        (setq str tostr)
+        (setq int tonum)
         
         (setq isstr strp)
         (setq isnum nump)
@@ -45,6 +47,9 @@
         (defmacro endsic (a b) `(ends (upper ,a) (upper ,b)))
         (defmacro beginsic (a b) `(begins (upper ,a) (upper ,b)))
         (defmacro contsic (a b) `(conts (upper ,a) (upper ,b)))
+        
+        (defmacro ++ (sym) `(setq ,sym (+ ,sym 1)))
+        (defmacro -- (sym) `(setq ,sym (- ,sym 1)))
         
         ))
   

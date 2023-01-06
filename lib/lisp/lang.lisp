@@ -4,20 +4,8 @@
 
 (progn
   
-  (defsform block ()
-    (apply progn ,@__args ,@__kwargs))
-  
-  
   (defun default (val def)
     (if (nullp val) def val))
-  
-  
-  (defmacro ++ (sym)
-    `(setq ,sym (+ ,sym 1)))
-  
-  
-  (defmacro -- (sym)
-    `(setq ,sym (- ,sym 1)))
   
   
   (defun lead0 (n digits)
@@ -37,6 +25,14 @@
                    (each d (fun (v k)
                              (put rs k v)))))
     rs)
+  
+  
+  ;; experiment with moving some builtins to macros
+  (defmacro @cliphead (m n)
+    `(slice ,m (max 0 (- (count ,m) ,n))))
+  
+  (defmacro @setclip (m n)
+    `(setq ,m (@cliphead ,m ,n)))
 
 )
 
