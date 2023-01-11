@@ -33,6 +33,17 @@
   
   (defmacro @setclip (m n)
     `(setq ,m (@cliphead ,m ,n)))
+  
+  
+  (defun filter-null (m) (filter m (fun (m1) (not (nullp m1)))))
+
+  
+  (defun zipper ()
+    (setq
+      zip-args __args
+      max-cnt (max (map __args (fun (lst) (count lst)))))
+    (map (seq max-cnt)
+         (fun (i) (map zip-args (fun (lst) (get lst i))))))
 
 )
 

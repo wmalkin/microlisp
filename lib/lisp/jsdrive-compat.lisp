@@ -24,6 +24,7 @@
         (setq le <=)
         (setq str tostr)
         (setq int tonum)
+        (setq ife if)
         
         (setq isstr strp)
         (setq isnum nump)
@@ -31,6 +32,9 @@
         (setq isdate datep)
         (setq islist listp)
         (setq isdict dictp)
+        
+        (setq gmtdate gmt-date)
+        (setq localdate local-date)
         
         (setq foreach each)
         (setq sdict put)
