@@ -18,9 +18,18 @@
     (cat "part.otr_events_" yyyy "_" (lead0 mm)))
   
   
+  (defun wh.extract-event (vin)
+    (if (listp vin)
+        (map vin (fun (v) (wh.extract-event v)))
+        (if (and (dictp vin) (has vin 'event'))
+            vin.event
+            vin)))
+  
+  
   (defun wh.otr ()
-    (setq query (otr-query *__args *__kwargs))
-    (pg.run "datalake" query.stmt query.val))
+    (setq query (wh.otr-query *__args *__kwargs))
+    (prt query)
+    (pg.post-process-result (wh.extract-event (pg.run "datalake" query))))
   
 
   (defun wh.otr-partition (yyyy mm)

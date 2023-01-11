@@ -19,6 +19,19 @@
     1w '7d' 2w '14d' 3w '21d' 4w '28d')
 
 
+  (defun dates.tz-offset ()
+    (setq dt (now))
+    (-
+      (mod
+        (+
+          36
+          (-
+            (get (local-date dt) 'hour')
+            (get (gmt-date dt) 'hour')))
+      24)
+    12))
+  
+  
   (defun dates.time-range-in-ms (time-range)
     """
     Convert `time-range` to milliseconds.

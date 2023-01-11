@@ -228,7 +228,7 @@
           "val" (append table (explode (zipper (keys __kwargs) (values __kwargs))))))
 
 
-  (defun pg.fmt-dates (va)
+  (defun pg.post-process-result (vin)
     """
     Format all of the returned dates in a Postgres result.
     This is required because JavaScript and Postgres do not
@@ -237,10 +237,11 @@
     implicit GMT timezone. JavaScript needs us to make that
     explicit.
     """
-    (map va (fun (v)
-             (if (isdate v)
-                 (dates.short-date-gmt v)
-                 v))))
+    (if (and (dictp vin) (nump vin.$date))
+        (todate vin.$date)
+        (if (or (dictp vin) (listp vin))
+            (map vin (fun (v) (pg.post-process-result v)))
+            vin)))
 
 
   (defun pg.fold-statement ()
@@ -257,7 +258,7 @@
                   (fun (m x) (dict
                                'stmt' (cat m.stmt x.stmt " ")
                                'val' (append m.val x.val)))))
-    (let rs.val (pg.fmt-dates rs.val))
+    (let rs.val (pg.fix-dates rs.val))
     rs)
 
 
@@ -268,9 +269,9 @@
     dates without timezone, in implicit GMT zone.
     """
     (if (or (islist r) (isdict r))
-        (map r ((itm) (pg.fix-dates itm)))
+        (map r (fun (itm) (pg.fix-dates itm)))
         (if (isdate r)
-            (- r (tz-offset-ms(r)))
+            (- r (* 3600000 (tz-offset r)))
             r)))
 
 
