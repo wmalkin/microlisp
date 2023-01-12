@@ -41,6 +41,7 @@
         (setq slist put)
         (setq gdict get)
         (setq glist get)
+        (setq has haskey)
         (setq butlast prune)
         
         (setq pushhead push)

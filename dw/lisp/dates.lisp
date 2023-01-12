@@ -232,6 +232,16 @@
     (if (> s 3600000)
         ">1h"
         (cat (tofixed (/ s 1000) 1) "s")))
+  
+  
+  (defun dates.fmt-timespan (dt)
+    (if (< dt 1000)
+        (cat dt 'ms')
+        (if (< dt 90000)
+            (cat (tofixed (/ dt 1000) 1) 's')
+            (if (< dt 3600000)
+                (cat (tofixed (/ dt 60000) 1) 'm')
+                (cat (tofixed (/ dt 3600000) 2) 'h')))))
 
   
 )

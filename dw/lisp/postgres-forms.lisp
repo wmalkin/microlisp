@@ -150,10 +150,6 @@
     """
     Postgres `where` statement for any number of child statements.
     """
-    (if (pg.inspect)
-        (block
-          (prt "pg.$where")
-          (insp (explode __args))))
     (fold (explode __args)
           (dict 'stmt' "where "
                 'val' (list))
@@ -249,10 +245,6 @@
     Fold together a set of Postgres statements into a single
     statement and values list.
     """
-    (if true
-        (block
-          (prt "pg.fold-statement")
-          (insp (explode __args))))
     (let rs (fold (explode __args)
                   (dict 'stmt' '' 'val' (list))
                   (fun (m x) (dict
