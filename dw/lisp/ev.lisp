@@ -5,13 +5,25 @@
 
 (progn
 
-  (defun ev.load ()
+  (defun ev.mongo.le ()
     (prt (mongo.$Q *__args))
     (setq ev._events
       (mongo.find _env 'events'
                   (mongo.$Q *__args)
                   *__kwargs))
     (count ev._events))
+  
+  
+  (defun ev.le (time-range)
+    (setq ev._events 
+          (wh.otr 
+            (wh.$t (default time-range "1d")) 
+            *__args *__kwargs))
+    (count ev._events))
+  
+  
+  (defun ev.lev (vid time-range)
+    (ev.le time-range (wh.$v vid) *__args *__kwargs))
   
   
   (defun ev.format.et (itm)
@@ -29,7 +41,7 @@
   (defun ev.format.loc (itm)
     (if (listp itm.event.loc)
         (if (listp (first itm.event.loc))
-            (cat (ev.format.gps itm.event.loc.0) '...')
+            (cat (ev.format.gps itm.event.loc.0) ' …' (count itm.event.loc))
             (ev.format.gps itm.event.loc))
         ""))
   
@@ -82,7 +94,7 @@
     (dict
       'colmap' colmap
       'columns' columns
-      'rows' (map veh-events (fun (itm index)
+      'rows' (map ev._events (fun (itm index)
                                (setq row (dict))
                                (each colmap (fun (f key) (put row key (f itm index))))
                                row))))
@@ -91,6 +103,15 @@
   (defun ev.el (from to)
     (with (data (ev.map-veh-events *__kwargs))
           (table.print &rows data.rows &columns data.columns)))
+  
+  
+  (defun ev.pe (idx)
+    (insp (get ev._events idx)))
+  
+
+  (defun ev.pev (idx)
+    (insp (get (get ev._events idx) "event")))
+  
 
 )
 
