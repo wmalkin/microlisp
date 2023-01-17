@@ -112,6 +112,24 @@
   (defun ev.pev (idx)
     (insp (get (get ev._events idx) "event")))
   
+  
+  (defun ev.track (idx)
+    (table.print 
+      &rows (map 
+              (get (get ev._events idx) "event.loc") 
+              (fun (p) (dict
+                         'lat' p.1
+                         'long' p.0
+                         'bearing' p.2
+                         'speed' p.3
+                         'timestamp' p.4)))))
+  
+  
+  ;; aliases for less typing...
+  (defmacro le () `(ev.le ,*__args ,*__kwargs))
+  (defmacro lev () `(ev.lev ,*__args ,*__kwargs))
+  (defmacro el () `(ev.el ,*__args ,*__kwargs))
+  (define-symbol-macro ee ev._events)
 
 )
 

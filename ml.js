@@ -14,8 +14,11 @@ require("./dw/funcs/mongo.js")(lisp);
 require("./dw/funcs/postgres.js");
 
 // lisp.streval("(dbg true)");
-lisp.load("./lib/lisp/");
-lisp.load("./dw/lisp");
+(async () => {
+      await lisp.load("./lib/lisp/");
+      await lisp.load("./dw/lisp");
+      await lisp.streval("(progn (prt 'run deferred') (_run_deferred_))");
+      repl.start(lisp.streval);
+}) ()
 
-repl.start(lisp.streval);
 
