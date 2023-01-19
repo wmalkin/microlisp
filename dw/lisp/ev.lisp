@@ -35,13 +35,13 @@
   
   
   (defun ev.format.gps (loc)
-    (cat '[' loc.1 ' ' loc.0 ' ' loc.2 ' ' loc.3 ']'))
+    (cat '[' (tofixed loc.1 6) ' ' (tofixed loc.0 6) ' ' (tofixed loc.2 1) ' ' (tofixed loc.3 1) ']'))
   
   
   (defun ev.format.loc (itm)
     (if (listp itm.event.loc)
         (if (listp (first itm.event.loc))
-            (cat (ev.format.gps itm.event.loc.0) ' …' (count itm.event.loc))
+            (cat (ev.format.gps itm.event.loc.0) ' (' (count itm.event.loc) ')')
             (ev.format.gps itm.event.loc))
         ""))
   

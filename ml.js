@@ -12,12 +12,13 @@ const options = {
 lisp.stdlibs(options);
 require("./dw/funcs/mongo.js")(lisp);
 require("./dw/funcs/postgres.js");
+require("./dw/funcs/geospatial.js");
 
 // lisp.streval("(dbg true)");
 (async () => {
       await lisp.load("./lib/lisp/");
       await lisp.load("./dw/lisp");
-      await lisp.streval("(progn (prt 'run deferred') (_run_deferred_))");
+      await lisp.streval("(__start__)");
       repl.start(lisp.streval);
 }) ()
 

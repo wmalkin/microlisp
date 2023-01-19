@@ -10,8 +10,14 @@
     (setq _deferred_ (append _deferred_ f)))
   
   (defun _run_deferred_ ()
-    (prt "_run_deferred_" (count _deferred_))
-    (prt _deferred_)
-    (each _deferred_ (fun (f) (prt "run:" f) (f))))
+    (each _deferred_ (fun (f) (f))))
+  
+  
+  (defun __start__ ()
+    (prt "*************************")
+    (prt "*       microlisp       *")
+    (prt "*    ©2023 Drivewyze    *")
+    (prt "*************************")
+    (_run_deferred_))
   
 )
