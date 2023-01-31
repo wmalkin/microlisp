@@ -169,6 +169,27 @@ function locdot (pA, pB) {
 }
 
 
+function getpolygon(pShape) {
+  if (util.islist(pShape))
+    return pShape;
+  if (!util.isdict(pShape))
+    return null;
+  if (util.isdict(pShape.location) && util.islist(pShape.location.coordinates))
+    return pShape.location.coordinates;
+  if (util.islist(pShape.poly))
+    return pShape.poly;
+  return null;
+}
+
+
+function getring(pShape, i) {
+  var poly = getpolygon(pShape);
+  if (!util.islist(poly))
+    return null;
+  return poly[i];
+}
+
+
 function distancetoedge (pP, pV, pW) {
   var L2 = lensq(pV, pW);
   if (L2 < EPSILON)
@@ -205,49 +226,29 @@ function pointinring (pPt, pRing) {
 }
 
 
-function pointinpolygon (pPt, pRings) {
-  if (!util.islist(pRings))
+function pointinpolygon (pPt, pShape) {
+  var poly = getpolygon(pShape);
+  if (!pointinring(pPt, getring(poly, 0)))
     return false;
-  var outerRing = pRings[0];
-  if (!util.islist(outerRing))
-    return false;
-
-  if (!pointinring(pPt, outerRing))
-    return false;
-
-  for (var i = 1; i < pRings.length; i++) {
-    var tmp = pRings[i];
-    if (util.islist(tmp)) {
-      if (pointinring(pPt, tmp))
-        return false;
-    }
-  }
-
+  for (var i = 1; i < poly.length; i++)
+    if (pointinring(pPt, getring(poly, i)))
+      return false;
   return true;
 }
 
 
 
-function inshape (pPt, pShape) {
-  return pointinpolygon(pPt, pShape);
-}
-
-
-
 function distancetoshape (pLoc, pShape) {
-  if (!util.islist(pShape))
-    return null;
-  var lPoints = pShape[0];
-  if (!util.islist(lPoints))
-    return null;
-  if (pointinshape(pLoc, pShape))
+  if (pointinpolygon(pLoc, pShape))
     return 0.0;
-
+  var ring = getring(pShape, 0);
+  if (!util.islist(ring))
+    return null;
   var lShortest = 9999999.0;
-  for (var i = 0; i < lPoints.length; i++) {
-    var j = (i + 1) % lPoints.length;
-    var p0 = lPoints[i];
-    var p1 = lPoints[j];
+  for (var i = 0; i < ring.length; i++) {
+    var j = (i + 1) % ring.length;
+    var p0 = ring[i];
+    var p1 = ring[j];
     var dn = distancetoedge(pLoc, p0, p1);
     if (dn < lShortest)
       lShortest = dn;
@@ -260,20 +261,15 @@ function distancetoshape (pLoc, pShape) {
 
 function area (polygon) {
   var area = 0.0;
-
-  if (!util.islist(polygon))
-    return null;
-  var lPoints = polygon[0];
-  if (!util.islist(lPoints))
+  var ring = getring(polygon, 0);
+  if (!util.islist(ring))
     return null;
 
-  var len = lPoints.length - 1;
+  var len = ring.length - 1;
   var j = len - 1;
   for (var i = 0; i < len; i++) {
-    var p1 = lPoints[i],
-      p2 = lPoints[j];
-    area += longitude(p1) * latitude(p2);
-    area -= latitude(p1) * longitude(p2);
+    area += longitude(ring[i]) * latitude(ring[j]);
+    area -= latitude(ring[i]) * longitude(ring[j]);
     j = i;
   }
   return Math.abs(area / 2);
@@ -301,17 +297,13 @@ function interpolate (p0, p1, ratio) {
 
 
 
-
 function centroid (pShape) {
   if (util.isdict(pShape))
     if (pShape.hasOwnProperty("centroid"))
       return pShape["centroid"];
 
-  var polygon = pShape["poly"];
-  if (!__islist(polygon))
-    return null;
-  var lPoints = polygon[0];
-  if (!__islist(lPoints))
+  var lPoints = getring(pShape, 0);
+  if (!util.islist(lPoints))
     return null;
 
   var len = lPoints.length;
@@ -393,10 +385,12 @@ func.def({ name: "locsub", body: func.binary(locsub) });
 func.def({ name: "locmul", body: func.binary(locmul) });
 func.def({ name: "locdiv", body: func.binary(locdiv) });
 func.def({ name: "locdot", body: func.binary(locdot) });
+func.def({ name: "getpolygon", body: func.unary(getpolygon) });
+func.def({ name: "getring", body: func.binary(getring) });
 func.def({ name: "distancetoedge", body: func.trinary(distancetoedge) });
 func.def({ name: "pointinring", body: func.binary(pointinring) });
 func.def({ name: "pointinpolygon", body: func.binary(pointinpolygon) });
-func.def({ name: "inshape", body: func.binary(inshape) });
+func.def({ name: "inshape", body: func.binary(pointinpolygon) });
 func.def({ name: "distancetoshape", body: func.binary(distancetoshape) });
 func.def({ name: "area", body: func.unary(area) });
 func.def({ name: "vecplus", body: func.binary(vecplus) });

@@ -224,20 +224,22 @@
           "val" (append table (explode (zipper (keys __kwargs) (values __kwargs))))))
 
 
-  (defun pg.post-process-result (vin)
-    """
-    Format all of the returned dates in a Postgres result.
-    This is required because JavaScript and Postgres do not
-    agree on what a date should look like. All of the dates
-    in our warehouse are bare dates (no timezone) with an
-    implicit GMT timezone. JavaScript needs us to make that
-    explicit.
-    """
-    (if (and (dictp vin) (nump vin.$date))
-        (todate vin.$date)
-        (if (or (dictp vin) (listp vin))
-            (map vin (fun (v) (pg.post-process-result v)))
-            vin)))
+  (defun pg.post-process-result (vin) vin)
+  
+  ; (defun pg.post-process-result (vin)
+  ;   """
+  ;   Format all of the returned dates in a Postgres result.
+  ;   This is required because JavaScript and Postgres do not
+  ;   agree on what a date should look like. All of the dates
+  ;   in our warehouse are bare dates (no timezone) with an
+  ;   implicit GMT timezone. JavaScript needs us to make that
+  ;   explicit.
+  ;   """
+  ;   (if (and (dictp vin) (nump vin.$date))
+  ;       (todate vin.$date)
+  ;       (if (or (dictp vin) (listp vin))
+  ;           (map vin (fun (v) (pg.post-process-result v)))
+  ;           vin)))
 
 
   (defun pg.fold-statement ()

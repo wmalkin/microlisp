@@ -14,11 +14,14 @@
     (count ev._events))
   
   
-  (defun ev.le (time-range)
-    (setq ev._events 
+  (defun ev.query (time-range)
           (wh.otr 
             (wh.$t (default time-range "1d")) 
             *__args *__kwargs))
+
+
+  (defun ev.le (time-range)
+    (setq ev._events (ev.query time-range *__args *__kwargs))
     (count ev._events))
   
   
@@ -34,6 +37,10 @@
       (if (nullp itm.event.action) "" (cat ',' itm.event.action))))
   
   
+  (defun ev.format.latlong (loc)
+    (cat '[' (tofixed loc.1 6) ' ' (tofixed loc.0 6) ']'))
+  
+  
   (defun ev.format.gps (loc)
     (cat '[' (tofixed loc.1 6) ' ' (tofixed loc.0 6) ' ' (tofixed loc.2 1) ' ' (tofixed loc.3 1) ']'))
   
@@ -47,8 +54,8 @@
   
   
   (defun ev.format.transit (itm)
-    (if (and itm.ts itm.event.TS)
-        (dates.fmt-timespan (- (tonum itm.ts) (tonum (substr itm.event.TS 0 13))))))
+    (if (and itm.server_time itm.event.TS)
+        (dates.fmt-timespan (- (tonum itm.server_time) (tonum (substr itm.event.TS 0 13))))))
   
   
   (defun ev.format.drift (itm)
@@ -60,13 +67,26 @@
                 (cat (tofixed (/ (- gps.4 (tonum ts)) 1000) 1) 's'))
               "")))
   
+
+  (defun ev.format.partner (itm) itm.partner)
+
+  (defun ev.format.direction (itm)
+    (if (== itm.direction 'inbound') 'in'
+      (if (== itm.direction 'outbound') 'out' '')))
+
+  (defun ev.format.event-size (itm) itm.event_size)
+
+
   
   (setq ev.default-colmap
         (dict
           'Idx' (fun (itm i) i)
+          'partner' ev.format.partner
+          'dir' ev.format.direction
+          'size' ev.format.event-size
           'vehicleId' (fun (itm) itm.context.vehicleId)
-          'serverISO' (fun (itm) (dates.short-date-gmt itm.ts))
-          'deviceISO' (fun (itm) (dates.short-date-gmt (tonum (substr itm.event.TS 0 13))))
+          'device-time' (fun (itm) (dates.short-date-gmt (tonum (substr itm.event.TS 0 13))))
+          'server-time' (fun (itm) (dates.short-date-gmt itm.server_time))
           'transit' ev.format.transit
           'drift' ev.format.drift
           'event-type' ev.format.et
@@ -129,6 +149,8 @@
   (defmacro le () `(ev.le ,*__args ,*__kwargs))
   (defmacro lev () `(ev.lev ,*__args ,*__kwargs))
   (defmacro el () `(ev.el ,*__args ,*__kwargs))
+  (defmacro pe () `(ev.pe ,*__args ,*__kwargs))
+  (defmacro pev () `(ev.pev ,*__args ,*__kwargs))
   (define-symbol-macro ee ev._events)
 
 )

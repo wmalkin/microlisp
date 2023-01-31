@@ -16,6 +16,8 @@
         (setq sub -)
         (setq mul *)
         (setq div /)
+        (setq deg2rad rad)
+        (setq rad2deg deg)
         (setq eq ==)
         (setq ne !=)
         (setq gt >)
@@ -24,6 +26,8 @@
         (setq le <=)
         (setq str tostr)
         (setq int tonum)
+        (setq & cat)
+        (setq fmtdate format-date)
         (setq ife if)
         
         (setq isstr strp)
