@@ -67,21 +67,21 @@
     """
     Returns a Postgres where clause for context.vehicleId.
     """
-    (wh.is-or-in "event.context.vehicleId" vid))
+    (wh.is-or-in "context.vehicleId" vid))
   
   
   (defun wh.$d (did)
     """
     Returns a Postgres where clause for context.deviceId.
     """
-    (wh.is-or-in "event.context.deviceId" did))
+    (wh.is-or-in "context.deviceId" did))
   
   
   (defun wh.$uid (uid)
     """
     Returns a Postgres where clause for context.userId.
     """
-    (wh.is-or-in "event.context.userId" uid))
+    (wh.is-or-in "context.userId" uid))
   
   
   (defun wh.$et (eventType trigger)
@@ -90,16 +90,16 @@
     """
     (if (not (nullp eventType))
         (if (not (nullp trigger))
-            (pg.$and (wh.is-or-in "event.event.eventType" eventType) (wh.is-or-in "event.event.trigger" trigger))
-            (wh.is-or-in "event.event.eventType" eventType))
-        (wh.is-or-in "event.event.trigger" trigger)))
+            (pg.$and (wh.is-or-in "event.eventType" eventType) (wh.is-or-in "event.trigger" trigger))
+            (wh.is-or-in "event.eventType" eventType))
+        (wh.is-or-in "event.trigger" trigger)))
   
   
   (defun wh.$evgid (id)
     """
     Returns a Postgres where clause for event.evgid.
     """
-    (wh.is-or-in "event.event.evgid" id))
+    (wh.is-or-in "event.evgid" id))
   
   
   (defun wh.$ui (scrn action)
@@ -108,16 +108,16 @@
     """
     (if (not (nullp scrn))
         (if (not (nullp action))
-            (pg.$and (wh.is-or-in "event.event.scrn" scrn) (wh.is-or-in "event.event.action" action))
-            (wh.is-or-in "event.event.scrn" scrn))
-        (wh.is-or-in "event.event.action" action)))
+            (pg.$and (wh.is-or-in "event.scrn" scrn) (wh.is-or-in "event.action" action))
+            (wh.is-or-in "event.scrn" scrn))
+        (wh.is-or-in "event.action" action)))
   
   
   (defun wh.$cmd (id)
     """
     Returns a Postgres where clause for event.command.
     """
-    (wh.is-or-in "event.event.command" id))
+    (wh.is-or-in "event.command" id))
   
   
   (defun wh.$fence (id)
