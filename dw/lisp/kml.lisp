@@ -75,9 +75,10 @@
 
   (defun kml.kml-point-or-path (event options)
     "Construct either a kml-path or kml-point from an event.loc value"
-    (if (listp event.loc.0)
-        (kml.kml-path event.loc options)
-        (kml.kml-point event.loc.1 event.loc.0 options)))
+    (setq loc (default e.event.loc e.event.Loc))
+    (if (listp loc.0)
+        (kml.kml-path loc options)
+        (kml.kml-point loc.1 loc.0 options)))
 
 
   ;; Generate a KML document content from a list of objects (use kml-point
@@ -109,13 +110,14 @@
   ;; Write a kml document to a given path
   (defun kml.write-kml (path kml-obj)
     "Write a kml object to a file at `path`."
-    (dos.fs-write path (kml-obj.kml kml-obj)))
+    (fs.with-file path fh &flags "w"
+      (fs.write-file fh (kml-obj.kml kml-obj))))
 
 
   ;; Convert a list of events to a list of kml objects
   (defun kml.kml-from-events (events)
     "Return a KML document object from a list of events."
-    (kml.kml-document (map events
+    (kml.kml-document (map (filter events (fun (e) (not (nullp (default e.event.loc e.event.Loc)))))
                            (fun (evt i)
                             (kml.kml-point-or-path evt.event (dict 'name' i))))))
 
@@ -141,4 +143,5 @@
               (kml.sanitizexmlstr "<A brown dog & a 'rat'; \"They're quite a pair.\">")
               "&lt;A brown dog &amp; a &apos;rat&apos;; \&quot;They&apos;re quite a pair.\&quot;&gt;"))
 
-  )
+
+)
