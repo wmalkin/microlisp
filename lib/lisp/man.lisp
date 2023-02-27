@@ -7,7 +7,9 @@
 
   
   (defun func.signature (f)
-    (cat "(" (func.name f) " " (func.bindings f) ")"))
+    (if (== (func.type f) 'js')
+      (cat "(" (func.name f) " <bound to js>)" )
+      (cat "(" (func.name f) " " (func.bindings f) ")")))
   
   
   (defun func.prt (f)
@@ -28,7 +30,7 @@
       ((funcp f) (func.prt f))
       ((isdict f) (ns f))
       ((isstr f) (man-grep f))
-      (true (prt (ansi.red "man page not found")))))
+      (true (prt (red "man page not found")))))
   
   
   (defun ns-ls (namespace)
@@ -53,7 +55,7 @@
     If no namespace is given, calls (nsls).
     """
     (if (isnull namespace)
-        (nsls)
+        (ns-ls)
         (if (dictp namespace)
             (progn
               (prt)

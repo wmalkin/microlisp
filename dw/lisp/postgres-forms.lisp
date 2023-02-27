@@ -28,7 +28,7 @@
                     (setq json-path (cat json-path " ->> " (pg.quote-string (last parts))))
                     (if with-as
                         (setq json-path (cat json-path " as " (last parts))))))
-        json-path)))
+              json-path)))
 
   
   (defun pg.$like (col val)

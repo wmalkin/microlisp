@@ -39,11 +39,27 @@
 
   
   (defun zipper ()
+    """
+    Zipper together any number of lists into a list of tuples.
+    Pad out tuples with null if the input lists are different lengths.
+    """
     (setq
       zip-args __args
       max-cnt (max (map __args (fun (lst) (count lst)))))
     (map (seq max-cnt)
          (fun (i) (map zip-args (fun (lst) (get lst i))))))
+
+
+  (defun cmap (f)
+    """
+    Clojure-style map where the first argument is a function
+    to map over all the remaining arguments. If there is one
+    additional argument, return the mapped value directly. If
+    there are multiple arguments, return a list of mapped results.
+    """
+    (if (> (count __args) 1)
+      (map __args (fun (coll) (cmap f coll)))
+      (map (first __args) f)))
 
 )
 
