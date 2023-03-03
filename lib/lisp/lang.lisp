@@ -60,6 +60,29 @@
     (if (> (count __args) 1)
       (map __args (fun (coll) (cmap f coll)))
       (map (first __args) f)))
+  
+  
+  (setq timer.units (dict
+                      "ms" 1
+                      "millisecond" 1
+                      "milliseconds" 1
+                      "s" 1000
+                      "second" 1000
+                      "seconds" 1000
+                      "m" 60000
+                      "minute" 60000
+                      "minutes" 60000))
+  
+  
+  (defmacro timer.every ()
+    (insp __args)
+    (setq argn 0 n 1 unit 1)
+    (if (nump (get __args argn))
+        (setq n (get __args argn) argn (+ 1 argn)))
+    (if (has timer.units (tostr (get __args argn)))
+        (setq unit (get timer.units (tostr (get __args argn))) argn (+ 1 argn)))
+    (setq body (slice __args argn))
+    `(timer.interval (* ,n ,unit) ,*body))
 
 )
 

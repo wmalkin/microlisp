@@ -19,7 +19,14 @@ require("./dw/funcs/geospatial.js");
       await lisp.load("./lib/lisp/");
       await lisp.load("./dw/lisp");
       await lisp.streval("(__start__)");
-      repl.start(lisp.streval);
+      repl.start(async (line) => {
+            var result = await lisp.streval(line);
+            if (result != null && result != undefined) {
+                  lisp.global.def("@2", lisp.global.get("@1"));
+                  lisp.global.def("@1", result);
+            }
+            return result;
+      });
 }) ()
 
 
